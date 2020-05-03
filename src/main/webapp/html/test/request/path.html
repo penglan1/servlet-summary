@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Path</title>
+
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+    <script src="/sm/lib/js/element-ui.js"></script>
+
+    <base href="http://localhost/sm/">
+
+    <style>
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+    </style>
+</head>
+<body>
+<div id="table">
+    <button v-on:click="getData">获取Path数据</button>
+    <el-table
+            :data="tableData"
+            style="width: 100%"
+            :row-class-name="tableRowClassName">
+        <el-table-column
+                prop="key"
+                label="key"
+                width="180">
+        </el-table-column>
+        <el-table-column
+                prop="value"
+                label="value">
+        </el-table-column>
+    </el-table>
+
+</div>
+<script>
+    var tableVue = new Vue({
+        el: "#table",
+        data() {
+            return {
+                tableData: []
+            }
+        },
+        methods: {
+            getData: function () {
+                ajaxSend(
+                    {
+                        state200: function (ajax) {
+                            var rest = ajax.responseText;
+                            //alert(rest);
+                            var path = JSON.parse(rest);
+                            console.log(path);
+                            tableVue.tableData = [];
+                            for (var i = 0; i < path.length; i++) {
+                                tableVue.tableData.push({
+                                    key: path[i].key,
+                                    value: path[i].value
+                                });
+                            }
+                        }
+                    },
+                    "GET",
+                    "request/path/中国?province=赣州&feature=生态宜居"
+                );
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex % 2 === 0) {
+                    return '';
+                } else if (rowIndex % 2 === 1) {
+                    return 'success-row';
+                }
+                return '';
+            }
+        }
+    });
+</script>
+</body>
+</html>

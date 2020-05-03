@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>pers.penglan</groupId>
+  <artifactId>servlet-summary</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+
+  <name>servlet-summary</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+  <description>
+    该项目用于复习并整合之前学习过程中创建的所有Servlet项目。
+  </description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.junit.version>4.11</project.junit.version>
+    <project.servlet-api.version>3.1.0</project.servlet-api.version>
+    <project.servlet.jsp-api.version>2.3.3</project.servlet.jsp-api.version>
+    <project.log4j-api.version>2.5</project.log4j-api.version>
+    <project.log4j-core.version>2.5</project.log4j-core.version>
+    <project.log4j-web.version>2.5</project.log4j-web.version>
+    <project.gson.version>2.8.6</project.gson.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${project.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!--添加Servlet和jsp所需要的接口-->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${project.servlet-api.version}</version>
+      <!-- 编译时使用，部署之后不用-->
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>javax.servlet.jsp-api</artifactId>
+      <version>${project.servlet.jsp-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--使用Log4j2日志管理-->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${project.log4j-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${project.log4j-core.version}</version>
+    </dependency>
+    <!--web项目中需要添加如下依赖-->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-web</artifactId>
+      <version>${project.log4j-web.version}</version>
+    </dependency>
+    <!--添加Gson, 对Json数据进行转换-->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${project.gson.version}</version>
+    </dependency>
+
+  </dependencies>
+
+
+  <build>
+    <finalName>servlet-summary</finalName>
+
+    <plugins>
+      <!-- 添加 Jetty  支持-->
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.4.26.v20200117</version>
+        <configuration>
+          <!--使用插件运行web应用时，需要指定webapp的文件夹，缺省情况下为src/main/webapp-->
+          <webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
+          <httpConnector>
+            <port>80</port> <!-- 这里指定 jetty 服务的端口号 -->
+          </httpConnector>
+          <webAppConfig>
+            <contextPath>/sm</contextPath> <!-- 这里指定在浏览器访问时，当前Web应用的根路径 -->
+            <!-- 为该应用定制一个专门的webdefault.xml,将修改后的webdefault.xml加入进来 -->
+            <defaultsDescriptor>src/main/resources/jetty/webdefault.xml</defaultsDescriptor>
+          </webAppConfig>
+          <!-- 指定监控的扫描时间间隔，0表示关闭jetty的热部署，正数代表扫描的间隔期 -->
+          <scanIntervalSeconds>0</scanIntervalSeconds>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+
+
+
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

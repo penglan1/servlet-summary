@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!--大概的意思是：对于IE浏览器使用Edge来渲染-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Parameter</title>
+    <!--引入vue.js-->
+    <!--建议在head标签中引入vue.js，防止出现页面闪烁的现象-->
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+
+    <base href="http://localhost/sm/">
+</head>
+<body>
+    <div id="form">
+        <form action="/request/parameter" enctype="application/x-www-form-urlencoded" method="post" accept-charset="UTF-8">
+            <label for="one">one</label><input type="text" name="one" id="one" v-model:value="oneValue"/><br/>
+            <label for="two">two</label><input type="text" name="two" id="two" v-model:value="twoValue"/><br/>
+            <label for="three">three</label><input type="text" name="two" id="three" v-model:value="threeValue"
+                                                   @keyup.enter="doSubmit"/><br/>
+            <input type="submit" value="提交" v-on:click.prevent="doSubmit"/>
+        </form>
+        <div v-html="rspResult"></div>
+    </div>
+    <script>
+        var formVue = new Vue({
+            el: "#form",
+            data: {
+                oneValue:"你好",
+                twoValue:"中国",
+                threeValue:"江西",
+                rspResult: ""
+            },
+            methods: {
+                doSubmit: function () {
+                    ajaxSend(
+                        {
+                            state200: function (ajax) {
+                                formVue.rspResult = ajax.responseText;
+                            }
+                        },
+                        "POST",
+                        "request/parameter",
+                        "one=" + formVue.oneValue + "&two=" + formVue.twoValue + "&three=" + formVue.threeValue,
+                        {
+                            key: "Content-Type",
+                            value: "application/x-www-form-urlencoded"
+                        },
+                        true
+                    );
+                }
+            }
+        });
+    </script>
+</body>
+</html>

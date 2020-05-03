@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File Upload</title>
+
+    <link rel="stylesheet" href="/sm/lib/css/element-ui.css">
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+    <script src="/sm/lib/js/element-ui.js"></script>
+
+    <base href="http://localhost/sm/">
+
+</head>
+<body>
+    <div id="fileUpload">
+        <el-upload
+                class="upload-demo"
+                ref="upload"
+                action="request/fileupload"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
+            <div slot="tip" class="el-upload__tip">上传文件大小不超过10MB</div>
+        </el-upload>
+    </div>
+    <script>
+        new  Vue({
+            el: "#fileUpload",
+            data() {
+                return {
+                    fileList: []
+                };
+            },
+            methods: {
+                submitUpload() {
+                    this.$refs.upload.submit();
+                },
+                handleRemove(file, fileList) {
+                    console.log(file, fileList);
+                },
+                handlePreview(file) {
+                    console.log(file);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Get Resource</title>
+
+    <link rel="stylesheet" href="/sm/lib/css/element-ui.css">
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+    <script src="/sm/lib/js/element-ui.js"></script>
+
+    <base href="http://localhost/sm/">
+
+</head>
+<body>
+    <div id="resource">
+        <p>提示：只能获取文本内容资源</p>
+        <el-input
+                placeholder="请输入文件在服务端的位置"
+                v-model="path"
+                style="width: 500px;" @keyup.enter="getResource">
+        </el-input>
+        <el-button type="primary" :loading="flag" style="display: inline-block;" v-on:click="getResource">获取文件内容</el-button>
+        <div><pre>{{result}}</pre></div>
+    </div>
+    <script>
+        var resourceVue = new Vue({
+            el: "#resource",
+            data: {
+                flag: false,
+                result: "",
+                path: ""
+            },
+            methods: {
+                getResource: function () {
+                    /*防止请求等待时又执行重复的或者另一个请求*/
+                    if (resourceVue.flag == false) {
+                        resourceVue.flag = true;
+                        ajaxSend(
+                            {
+                                state200: function (ajax) {
+                                    var rest = ajax.responseText;
+                                    resourceVue.flag = false;
+                                    resourceVue.result = rest;
+                                }
+                            },
+                            "POST",
+                            "context/resource",
+                            "resourcePath=" + resourceVue.path,
+                            {
+                                key: "Content-type",
+                                value: "application/x-www-form-urlencoded"
+                            }
+                        );
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

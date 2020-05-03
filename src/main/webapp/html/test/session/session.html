@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Session</title>
+
+    <link rel="stylesheet" href="/sm/lib/css/element-ui.css">
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+    <script src="/sm/lib/js/element-ui.js"></script>
+
+    <base href="http://localhost/sm/">
+
+</head>
+<body>
+    <div id="session">
+        <el-button type="primary" :loading="getFlag" style="display: inline-block;"
+                   v-on:click="getId">获取SessionId</el-button>
+        <el-button type="primary" :loading="changeFlag" style="display: inline-block;"
+                   v-on:click="changeId">修改SessionId</el-button>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName">
+            <el-table-column
+                    prop="key"
+                    label="key"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="value"
+                    label="value">
+            </el-table-column>
+        </el-table>
+    </div>
+    <script>
+        var sessionVue = new Vue({
+            el: "#session",
+            data() {
+                return {
+                    tableData: [],
+                    getFlag: false,
+                    changeFlag: false
+                }
+            },
+            methods: {
+                getId: function () {
+                    if (sessionVue.getFlag == false) {
+                        sessionVue.getFlag = true;
+                        ajaxSend(
+                            {
+                                state200: function (ajax) {
+                                    var rest = ajax.responseText;
+                                    //alert(rest);
+                                    var obj = JSON.parse(rest);
+                                    console.log(obj);
+                                    sessionVue.tableData = [];
+                                    for (var i = 0; i < obj.length; i++) {
+                                        sessionVue.tableData.push({
+                                            key: obj[i].key,
+                                            value: obj[i].value
+                                        });
+                                    }
+                                    sessionVue.getFlag = false;
+                                }
+                            },
+                            "GET",
+                            "session/create"
+                        );
+                    }
+                },
+                changeId: function () {
+                    if (sessionVue.changeFlag == false) {
+                        sessionVue.changeFlag = true;
+                        ajaxSend(
+                            {
+                                state200: function (ajax) {
+                                    var rest = ajax.responseText;
+                                    //alert(rest);
+                                    var obj = JSON.parse(rest);
+                                    console.log(obj);
+                                    sessionVue.tableData = [];
+                                    for (var i = 0; i < obj.length; i++) {
+                                        sessionVue.tableData.push({
+                                            key: obj[i].key,
+                                            value: obj[i].value
+                                        });
+                                    }
+                                    sessionVue.changeFlag = false;
+                                }
+                            },
+                            "GET",
+                            "session/changeid"
+                        );
+                    }
+                },
+                tableRowClassName({row, rowIndex}) {
+                    if (rowIndex % 2 === 0) {
+                        return '';
+                    } else if (rowIndex % 2 === 1) {
+                        return 'success-row';
+                    }
+                    return '';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

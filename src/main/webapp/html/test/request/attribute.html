@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Attribute</title>
+
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+
+    <base href="http://localhost/sm/">
+
+</head>
+<body>
+    <div id="app">
+        <button v-on:click.prvent="getData">获取请求attribute测试数据</button>
+        <div v-html="name"></div>
+        <div v-html="address"></div>
+    </div>
+    <script>
+        var appVue = new Vue({
+            el: "#app",
+            data: {
+                name: "",
+                address: ""
+            },
+            methods: {
+                getData: function () {
+                    ajaxSend(
+                        {
+                            state200: function (ajax) {
+                                var rest = ajax.responseText;
+                                alert(rest);
+                                var attr = JSON.parse(rest);
+                                if (attr.name) {
+                                    appVue.name = attr.name;
+                                } else {
+                                    appVue.name = "name属性不存在";
+                                }
+                                if (attr.address) {
+                                    appVue.address = attr.address;
+                                } else {
+                                    appVue.address = "address属性不存在";
+                                }
+                            }
+                        },
+                        "GET",
+                        "request/attribute"
+                    );
+                }
+            }
+        });
+    </script>
+</body>
+</html>

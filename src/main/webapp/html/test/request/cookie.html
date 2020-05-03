@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cookie</title>
+
+    <script src="/sm/lib/js/vue.js"></script>
+    <script src="/sm/lib/js/myAjax.js"></script>
+
+    <base href="http://localhost/sm/">
+
+</head>
+<body>
+    <div id="cookie">
+        <button @click="send">发送请求</button>
+    </div>
+    <script>
+        var cookieVue = new Vue({
+            el: "#cookie",
+            methods: {
+                send: function () {
+                    ajaxSend(
+                        {
+                            state200: function (ajax) {
+                                console.log("请求-响应成功");
+                            }
+                        },
+                        "GET",
+                        "request/cookies"
+                    );
+                }
+            }
+        });
+    </script>
+</body>
+</html>
